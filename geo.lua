@@ -674,14 +674,14 @@ end
 --- Upserts a member's position and publishes a notification.
 -- @return upserted Number of upserted members
 Geo.GEOTRACK = function()
-  local geokey = Geo._getcommandkeys(Geo._TYPE_GEO)
+  -- local geokey = Geo._getcommandkeys(Geo._TYPE_GEO)
   
     -- ARGV's should be made of tuples (longitude, latitude, member)
   assert(#ARGV > 0 and #ARGV % 3 == 0, 'Expecting a positive multiple of three arguements')
   
   local reply = 0
   while #ARGV > 0 do
-    local lon, lat, member = table.remove(ARGV, 1), table.remove(ARGV, 1),table.remove(ARGV, 1)
+    local geokey, lon, lat, member = table.remove(ARGV, 1), table.remove(ARGV, 1), table.remove(ARGV, 1),table.remove(ARGV, 1)
     reply = reply + redis.call('GEOADD', geokey, lon, lat, member)
     redis.call('PUBLISH', '__geo:' .. geokey .. ':' .. member, lon .. ':' .. lat)
     end
